@@ -1,0 +1,2 @@
+# テキストは LF にそろえる（core.autocrlf=true の環境でも作業ツリーを LF にする）
+* text=auto eol=lf
