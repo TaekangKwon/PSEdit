@@ -78,7 +78,7 @@ PSEdit スキルを導入し、Claude Code に日本語・韓国語の文書を�
 
 | 依頼の表現 | テンプレート | 先頭の節 |
 |---|---|---|
-| 設計書、方式設計 / 설계서 | `design` | 結論（設計方針） |
+| 設計書、方式設計、技術仕様書 / 설계서, 기술명세서 | `design` | 結論（設計方針） |
 | 検討資料、提案書、比較 / 검토자료 | `review` | 結論（推奨案） |
 | 調査資料、調査報告 / 조사자료 | `research` | 結論（自分たちにとっての意味） |
 | 利用者マニュアル、手順書 / 매뉴얼 | `manual` | この文書でできること |
@@ -86,6 +86,8 @@ PSEdit スキルを導入し、Claude Code に日本語・韓国語の文書を�
 | 議事録 / 회의록 | `minutes` | 決定事項 |
 
 「報告書」だけのときは中身で選ぶ。判断を求めるなら検討資料、分かったことを伝えるなら調査資料、進み具合なら作業報告になる。
+
+技術仕様書を書くとき、または文書が技術を 3 つ以上扱うときは、頼まなくても「技術スタックと連携」の節に ① 構成図 ② 技術ごとの役割表（名前・一行の役割・なかったら？）③ 代表的な処理 1 つの連携の流れが入る。描く前に Claude が形式を決める。依頼に形式があるか、直すファイルや同じ種類の文書があればその形式に合わせ、なければ「HTML（SVG）と Markdown（Mermaid）のどちらにするか」を推奨付きで 1 回尋ねる。配布・共有用や構成要素が多いときは HTML、リポジトリの中で一緒に直していく文書なら Markdown を推奨する。ルールは `skills/psedit/references/tech-stack.md` にある。
 
 ### 3. 既存の文書を整える（ブラッシュアップモード）
 
@@ -181,6 +183,7 @@ PSEdit スキルを導入し、Claude Code に日本語・韓国語の文書を�
 | スキル本体 | `skills/psedit/SKILL.md`（`~/.claude/skills/psedit` にリンク） |
 | 文書の骨組み | `skills/psedit/templates/{ko,ja}/{design,review,research,manual,report,minutes}.md` |
 | 構成チェック | `skills/psedit/references/structure-checklist.md` |
+| 技術スタックの図のルール | `skills/psedit/references/tech-stack.md` |
 | 文体パターン辞書 | `skills/psedit/references/patterns-ja.md`、`patterns-ko.md` |
 | 自動案内フック | `skills/psedit/hooks/psedit-prompt.mjs` |
 | グローバルルールの元 | `install/CLAUDE.snippet.md` |

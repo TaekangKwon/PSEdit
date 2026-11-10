@@ -78,7 +78,7 @@ PSEdit 스킬을 설치해 Claude Code에 한국어·일본어 문서를 쓰고 
 
 | 요청 표현 | 템플릿 | 맨 앞 섹션 |
 |---|---|---|
-| 설계서, 아키텍처 / 設計書 | `design` | 결론 (설계 방침) |
+| 설계서, 아키텍처, 기술명세서 / 設計書, 技術仕様書 | `design` | 결론 (설계 방침) |
 | 검토자료, 비교, 선정, 제안 / 検討資料, 提案書 | `review` | 결론 (추천안) |
 | 조사자료, 리서치, 분석 / 調査資料 | `research` | 결론 (우리에게 의미하는 것) |
 | 사용자설명서, 매뉴얼, 가이드 / 手順書 | `manual` | 이 문서로 할 수 있는 것 |
@@ -86,6 +86,8 @@ PSEdit 스킬을 설치해 Claude Code에 한국어·일본어 문서를 쓰고 
 | 회의록 / 議事録 | `minutes` | 결정 사항 |
 
 「보고서」만 있으면 내용으로 고른다: 결정을 구하면 검토자료, 발견을 전하면 조사자료, 진행 상황이면 작업보고.
+
+기술명세서를 쓰거나 문서가 기술을 3개 이상 다루면, 따로 말하지 않아도 「기술 스택과 연동」 소절에 ① 구성도 ② 기술별 역할 표(이름 · 한 줄 역할 · 없으면?) ③ 대표 동작 하나의 연동 흐름이 들어간다. 그리기 전에 Claude가 형식을 정한다. 요청에 형식이 있거나 고칠 파일·같은 종류 문서가 있으면 그 형식을 따르고, 없으면 "HTML(SVG)과 Markdown(Mermaid) 중 무엇으로 할지"를 추천과 함께 한 번 묻는다. 배포·공유용이거나 구성 요소가 많으면 HTML, 저장소 안에서 함께 고쳐 나갈 문서면 Markdown을 추천한다. 규칙은 `skills/psedit/references/tech-stack.md`에 있다.
 
 ### 3. 기존 문서 다듬기 (윤문 모드)
 
@@ -181,6 +183,7 @@ PSEdit 스킬을 설치해 Claude Code에 한국어·일본어 문서를 쓰고 
 | 스킬 본체 | `skills/psedit/SKILL.md` (`~/.claude/skills/psedit`로 연결) |
 | 문서 골격 | `skills/psedit/templates/{ko,ja}/{design,review,research,manual,report,minutes}.md` |
 | 구조 점검표 | `skills/psedit/references/structure-checklist.md` |
+| 기술 스택 그림 규칙 | `skills/psedit/references/tech-stack.md` |
 | 문체 패턴 사전 | `skills/psedit/references/patterns-ko.md`, `patterns-ja.md` |
 | 자동 안내 훅 | `skills/psedit/hooks/psedit-prompt.mjs` |
 | 전역 규칙 원본 | `install/CLAUDE.snippet.md` |
