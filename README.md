@@ -8,11 +8,31 @@
 
 PSEdit stands for **P**olishing / **S**tylistic **Edit**ing (윤문 / ブラッシュアップ).
 
+## Example
+
+Just ask, and the document comes back with the conclusion at the top. You do not have to mention the skill.
+
+Request:
+
 ```text
 Notion을 Confluence로 바꿀지 검토자료 써줘. 사용자 120명, Notion 1인당 월 15달러, Confluence 11달러, 갱신일 12월 31일.
 ```
 
-With PSEdit installed, Claude answers a request like this with a review document in a fixed order: a conclusion of three lines or fewer (the recommendation, one reason, who does what by when), then a **Decisions needed** list that recommends an option for each item, and only then the background, evidence and comparison table. You do not have to mention the skill.
+("Write a review document on switching from Notion to Confluence. 120 users, Notion $15 per user per month, Confluence $11, renewal on December 31.")
+
+First screen of the result:
+
+```markdown
+## 결론
+Confluence로 바꾸는 것을 추천합니다.
+이유: 120명 기준 비용이 연 5,760달러 줄어듭니다.
+할 일: 12월 31일 갱신 전에 Notion 해지와 Confluence 계약을 마칩니다.
+
+## 결정 필요
+1. Notion 계약을 갱신할지 — 추천: 갱신하지 않음 (1인당 월 4달러 쌈). 기한: 12월 31일
+```
+
+The **conclusion** recommends Confluence, gives one reason ($5,760 a year saved for 120 users) and says what to do before the December 31 renewal. **Decisions needed** lists each choice with a recommendation and a deadline. Reading this much is enough to know what to decide; the background, evidence and comparison table follow below.
 
 ---
 
@@ -20,23 +40,26 @@ With PSEdit installed, Claude answers a request like this with a review document
 
 When I work with AI, it writes many documents for me, such as designs, review documents, research notes and user manuals, and it explains what it is doing as it works. The content is not wrong. But it is often wordy and repetitive, and above all it does not make clear **what the conclusion is, what I need to choose, or what I need to do**. That often left me stuck.
 
-So PSEdit fixes the **structure first** (conclusion → decisions → background → evidence → details) and the **style second**, and it never changes the facts, numbers, conditions or certainty of the original. With the optional global rules, the same principle also applies to what the AI explains while it works.
+So PSEdit fixes the **structure first** (conclusion → decisions → background → evidence → details) and the **style second**, and it never changes the facts, numbers, conditions or certainty of the original. If you also paste the writing rules into `~/.claude/CLAUDE.md` (installation step 2, optional), the same principle applies not only to documents but also to what the AI explains while it works.
 
 ## What it does
 
-| Area | What you get |
+### What you can ask for
+
+| Request | Result |
 | --- | --- |
-| Three modes | **Write** a new document · **Polish** an existing document or pasted text · **Convert** a document to another level of detail or the other language |
-| Six document types | Design, review (decision request), research, user manual, work report, meeting minutes — each with a Korean and a Japanese template |
-| Tech-stack diagrams | Technical specs and detailed tech explanations get a stack diagram, a role-per-technology table and an integration flow without being asked. The format — Markdown (Mermaid) or HTML (SVG) — is settled first; if nothing settles it, you are asked, with a recommendation |
-| Numbered screenshots in manuals | User manuals show each screen as an image with numbered markers and a matching short list of actions. If a screen cannot be captured, a look-alike mock image is made and labelled as such. HTML manuals with four or more chapters get a fixed table of contents on the left and a title banner |
-| Structure check | A self-check list: is the conclusion on the first screen, are decisions in one place, is anything repeated |
-| Style dictionaries | Korean and Japanese pattern dictionaries (hedging, preambles, inanimate subjects and passives, translated-sounding phrases, overused words, symbols), each pattern with a severity |
-| Invariants | No new facts, numbers or names; no changes to negation, conditions, tense, certainty or units; code blocks and table data stay as they are |
-| Detail levels | `short` · `normal` · `detailed`, chosen by words in your request ("짧게", "詳しく", …) and recorded in the document's frontmatter |
-| Your taste | Say "don't use this phrase" once; the rule is saved to `~/.claude/psedit/taste.md` and applied from then on |
-| Project standards | If a project has its own document templates, PSEdit keeps their structure; it only moves the conclusion to the top and checks the style |
-| Optional hook | A `UserPromptSubmit` hook that reminds Claude to use the skill when a prompt mentions a document type. Can be turned off per project |
+| Write a new document | Design, review (decision request), research, user manual, work report or meeting minutes, in a Korean or Japanese template that puts the conclusion first |
+| Polish existing text | Moves the conclusion of a document or pasted text to the top and cuts hedging, empty preambles, translated-sounding phrases and repetition. Reports what it changed |
+| Make another version | A short or detailed version, or a Korean or Japanese version, of the same document. The conclusion stays the same across versions |
+| Set the length | Words in your request ("짧게", "詳しく", …) pick `short`, `normal` or `detailed`. For a saved document, the level is recorded in its frontmatter |
+| Ban a phrase | Say "don't use this phrase" once; the rule is saved to `~/.claude/psedit/taste.md` and applied from then on |
+| Technical specs and tech-stack explanations | A stack diagram, a role-per-technology table and an integration flow are added without being asked. If the format — Markdown (Mermaid) or HTML (SVG) — is not settled, you are asked first, with a recommendation |
+| User manuals with screen steps | Each screen is shown as an image with numbered markers and a matching short list of actions. If a screen cannot be captured, a look-alike mock image is made and labelled as such. HTML manuals with four or more chapters get a fixed table of contents on the left and a title banner |
+
+### What is kept
+
+- No facts, numbers or names that are not in the original. No changes to negation, conditions, tense, certainty or units. Code blocks and table data stay as they are.
+- If a project has its own document templates, PSEdit keeps their structure; it only moves the conclusion to the top and checks the style.
 
 ## Requirements
 
@@ -104,27 +127,19 @@ When polishing, PSEdit keeps the author's voice (polite or plain form, favorite 
 
 ```text
 구조: moved the two recommendation sentences from section 5 to the top and collected 3 decisions
-문체: 16/33   (sentences changed / total)
-확인 필요: facts that cannot be confirmed from the original
+문체: 16/33
+확인 필요: the "30% faster response" in section 3 has no measurement conditions in the original
 ```
 
+`문체: 16/33` means 16 of the 33 sentences were changed. `확인 필요` (to confirm) lists facts that cannot be checked from the original alone.
+
 If the original has no conclusion, PSEdit does not invent one. It offers two or three candidates built from the original's facts, recommends one, and adds the one you pick.
-
-## How it works
-
-| Layer | Where | Role |
-| --- | --- | --- |
-| Skill description | `skills/psedit/SKILL.md` | Tells Claude when to use PSEdit and holds the procedure |
-| Global rules (optional) | `~/.claude/CLAUDE.md` | Writing rules for every session |
-| Hook (optional) | `skills/psedit/hooks/psedit-prompt.mjs` | Adds a one-line hint when a prompt mentions a document type |
-
-When rules conflict, PSEdit follows this order: your instruction in this request > invariants (facts, numbers, meaning) > your taste rules > templates and pattern dictionaries.
 
 ## Limitations
 
 - Korean and Japanese only. English documents are not covered.
 - The instructions inside the skill are written in Korean; Claude reads them fine, but you may want a translator if you plan to modify them.
-- Templates are not applied to README, CHANGELOG, code comments, commit messages or prompt files.
+- Templates are not applied to README, CHANGELOG, code comments, commit messages or prompt files. These have set formats that a conclusion-first structure does not fit.
 - PSEdit guides Claude; it is not a linter. Results depend on the model and on the facts you provide.
 
 ## Project layout
