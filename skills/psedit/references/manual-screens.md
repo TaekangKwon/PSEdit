@@ -75,8 +75,8 @@ Markdown이면 번호표를 이미지에 구워 넣는다 (8절).
 ```html
 <style>
 :root{--card:#fff;--line:#cfd5dd;--mut:#5c6573;--mark:#e0620f;--marks:rgba(224,98,15,.22)}
-figure.shot{margin:16px 0 12px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px}
-figure.shot .img{position:relative}
+figure.shot{margin:16px 0 12px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px 14px 10px 22px;overflow-x:auto}
+figure.shot .img{position:relative;min-width:calc(var(--iw) * .62px)}
 figure.shot img{display:block;width:100%;height:auto;border-radius:4px}
 figure.shot figcaption{font-size:12px;color:var(--mut);padding:8px 2px 0}
 .pin{position:absolute;left:calc(var(--x)/var(--iw)*100%);top:calc(var(--y)/var(--ih)*100%);width:calc(var(--w)/var(--iw)*100%);height:calc(var(--h)/var(--ih)*100%);
@@ -107,6 +107,67 @@ ol.do small{display:block;color:var(--mut);font-size:13px}
 
 - `--iw`·`--ih`는 이미지 원래 크기(픽셀), `--x --y --w --h`는 그 이미지 위의 좌표다. 화면 폭이 바뀌어도 번호표가 따라 줄어든다.
 - 회색 번호는 `<li data-n="4" class="plain">`.
+- `min-width`는 그림이 원래 크기의 62% 밑으로 줄지 않게 한다. 더 좁은 화면에서는 그림 안에서 가로로 스크롤된다. 번호 원은 크기가 고정이라 그림이 너무 작아지면 서로 겹친다.
+- `figure.shot`의 위·왼쪽 안쪽 여백은 테두리 바깥에 놓이는 번호 원이 들어갈 자리다.
+
+### 페이지 틀
+
+장이 4개 이상이면 **왼쪽 고정 목차 + 제목 띠**로 짠다. 독자는 절차 중간에 다른 장(설정 항목, 문제가 생기면)을 오가므로 목차가 늘 보여야 한다.
+
+- 왼쪽 목차(260px 안팎)는 스크롤해도 고정하고, 지금 읽는 장을 색으로 표시한다. 절차 장은 하위 항목(3.1, 3.2…)까지 넣는다. 맨 위 항목은 최단 절차로 가는 링크다.
+- 제목은 색 띠 하나에 「문서 종류 / 제품 이름 / 한 줄 소개」만 넣는다. 결론(최단 절차)은 띠 바로 아래 상자에 둔다.
+- 장마다 카드로 나누고, 장 제목에는 번호 배지와 밑줄을 붙인다. 카드 안의 그림·동작 목록은 바탕색을 한 단계 다르게 해서 카드와 구분한다.
+- 860px 이하에서는 목차를 본문 위로 올리고 처음에는 접어 둔다. 인쇄할 때는 목차를 빼고 띠 색은 그대로 찍는다.
+
+```html
+<style>
+:root{--pg:#eef1f5;--acc:#1f5fa8;--accs:#dbe7f6;--hero1:#1f5fa8;--hero2:#163f75}
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr);align-items:start}
+nav.toc{position:sticky;top:0;height:100vh;overflow:auto;background:var(--card);border-right:1px solid var(--line);padding:20px 14px 24px}
+nav.toc summary{cursor:pointer;font-weight:700;color:var(--mut)}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc a{display:block;padding:5px 8px;border-radius:6px;color:inherit;text-decoration:none;font-size:14px}
+nav.toc a:hover{background:var(--accs)}
+nav.toc a.is-active{background:var(--acc);color:var(--card)}
+nav.toc a .n{display:inline-block;min-width:1.7em;font-weight:700}
+nav.toc ol ol a{padding-left:36px;font-size:13px}
+.doc{min-width:0;max-width:960px;padding:28px 36px 96px}
+.cover{background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;border-radius:12px;padding:28px 30px}
+.cover h1{margin:2px 0 8px;font-size:34px;line-height:1.25}
+section.ch{margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 28px 24px}
+section.ch>h2{display:flex;align-items:center;gap:12px;margin:0 0 10px;padding-bottom:8px;border-bottom:2px solid var(--acc)}
+.chno{flex:none;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--acc);color:var(--card)}
+section.ch h3{padding-left:10px;border-left:5px solid var(--acc)}
+section.ch figure.shot,section.ch ol.do>li{background:var(--pg)}
+@media (max-width:860px){.layout{display:block}nav.toc{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}.doc{padding:14px 12px 64px}section.ch{padding:14px 12px 18px}}
+@media print{.layout{display:block}nav.toc{display:none}.doc{max-width:none;padding:0}section.ch{break-before:page;border:0;padding:0}.cover,.chno{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+
+<div class="layout">
+<nav class="toc" aria-label="목차"><details open><summary>목차</summary><ol>
+  <li><a href="#top"><span class="n">0</span>{최단 절차}</a></li>
+  <li><a href="#ch1"><span class="n">1</span>{장 제목}</a>
+    <ol><li><a href="#ch1-1">1.1 {절 제목}</a></li></ol></li>
+</ol></details></nav>
+<main class="doc">
+  <header class="cover" id="top"><p>사용 설명서</p><h1>{제품 이름}</h1><p>{한 줄 소개}</p></header>
+  <section class="ch" id="ch1"><h2><span class="chno">1</span>{장 제목}</h2> … </section>
+</main>
+</div>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('nav.toc a')),
+      targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1))}),
+      det=document.querySelector('nav.toc details');
+  if(det&&innerWidth<=860)det.removeAttribute('open');
+  function update(){var cur=0;targets.forEach(function(t,i){if(t&&t.getBoundingClientRect().top<=90)cur=i});
+    links.forEach(function(a,i){a.classList.toggle('is-active',i===cur)})}
+  addEventListener('scroll',function(){requestAnimationFrame(update)},{passive:true});update();
+})();
+</script>
+```
+- 다크 모드에서는 `--hero1`·`--hero2`를 더 어두운 파랑으로 바꾼다. 띠의 글자는 흰색 그대로 둔다.
+- 장이 3개 이하인 짧은 설명서는 목차 없이 제목 띠만 쓴다.
 
 ## 7. 만드는 법
 
@@ -140,6 +201,7 @@ ol.do small{display:block;color:var(--mut);font-size:13px}
 ## 8. 확인과 Markdown용 이미지
 
 - 완성한 그림(이미지 + 번호표)을 헤드리스 브라우저로 렌더링하고 결과 PNG를 직접 본다. 테두리가 요소에서 어긋나거나 번호 원이 글자를 가리면 좌표를 고친다.
+- HTML 설명서는 넓은 화면(1280px), 목차 때문에 본문이 좁아지는 폭(900px 안팎), 휴대폰 폭(390px), 다크 모드에서 연다. 번호 원끼리 겹치지 않는지, 페이지 전체가 가로로 스크롤되지 않는지, 목차의 현재 장 표시가 맞는지 본다.
 - Markdown 문서에는 번호표를 구운 이미지를 넣는다. `<div class="img">` 부분만 담은 HTML을 `body{margin:0}`, 창 크기 = 이미지 크기(`--window-size={iw},{ih}`)로 찍어 `NN_화면이름.pins.png`로 저장하고, 아래에 같은 번호의 목록을 쓴다. 목록 앞에는 번호 원 문자(①②③)를 쓴다.
   ```markdown
   ![로그인 화면 (재현 이미지)](img/login/01_login.pins.png)
@@ -160,7 +222,8 @@ ol.do small{display:block;color:var(--mut);font-size:13px}
 ## 10. 자기 점검
 
 - [ ] 화면 조작 단계마다 이미지가 있고, 번호표와 목록의 번호가 1:1이다.
-- [ ] 번호표 위치를 렌더링 결과에서 눈으로 확인했다.
+- [ ] 번호표 위치를 렌더링 결과에서 눈으로 확인했다. 좁은 폭에서도 번호 원이 겹치지 않는다.
+- [ ] 장이 4개 이상이면 왼쪽 고정 목차와 제목 띠가 있다.
 - [ ] 한 그림에 번호표가 5개 이하이고, 빈 여백이 절반을 넘지 않는다.
 - [ ] 재현 이미지는 캡션에 표시했고, 재료에 없는 버튼·메뉴가 없다.
 - [ ] 비밀값이 보이지 않는다.
