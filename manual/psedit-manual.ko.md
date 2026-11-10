@@ -89,6 +89,8 @@ PSEdit 스킬을 설치해 Claude Code에 한국어·일본어 문서를 쓰고 
 
 기술명세서를 쓰거나 문서가 기술을 3개 이상 다루면, 따로 말하지 않아도 「기술 스택과 연동」 소절에 ① 구성도 ② 기술별 역할 표(이름 · 한 줄 역할 · 없으면?) ③ 대표 동작 하나의 연동 흐름이 들어간다. 그리기 전에 Claude가 형식을 정한다. 요청에 형식이 있거나 고칠 파일·같은 종류 문서가 있으면 그 형식을 따르고, 없으면 "HTML(SVG)과 Markdown(Mermaid) 중 무엇으로 할지"를 추천과 함께 한 번 묻는다. 배포·공유용이거나 구성 요소가 많으면 HTML, 저장소 안에서 함께 고쳐 나갈 문서면 Markdown을 추천한다. 규칙은 `skills/psedit/references/tech-stack.md`에 있다.
 
+사용자설명서의 절차에 화면 조작이 있으면, 화면마다 이미지에 번호표(①②③)를 붙이고 그 아래에 같은 번호의 동작을 한 문장씩 쓴다. 이미지는 내가 준 캡처나 저장소의 캡처를 먼저 쓰고, 없으면 Claude가 직접 캡처하고, 그것도 안 되면 비슷한 재현 이미지를 만들어 캡션에 「재현 이미지」라고 표시한다. 형식은 정하지 않으면 HTML이다. 장이 4개 이상이면 왼쪽에 스크롤해도 따라오는 목차(지금 읽는 장 표시)를 두고, 제목은 색 띠로 강조한다. 휴대폰 폭에서는 목차가 본문 위로 올라가 접힌다. 규칙은 `skills/psedit/references/manual-screens.md`에 있다.
+
 ### 3. 기존 문서 다듬기 (윤문 모드)
 
 1. 파일 경로를 주거나 글을 붙여 넣고 "윤문해줘", "다듬어줘", "ブラッシュアップして"라고 요청한다.
@@ -184,6 +186,7 @@ PSEdit 스킬을 설치해 Claude Code에 한국어·일본어 문서를 쓰고 
 | 문서 골격 | `skills/psedit/templates/{ko,ja}/{design,review,research,manual,report,minutes}.md` |
 | 구조 점검표 | `skills/psedit/references/structure-checklist.md` |
 | 기술 스택 그림 규칙 | `skills/psedit/references/tech-stack.md` |
+| 설명서 화면 규칙 | `skills/psedit/references/manual-screens.md` |
 | 문체 패턴 사전 | `skills/psedit/references/patterns-ko.md`, `patterns-ja.md` |
 | 자동 안내 훅 | `skills/psedit/hooks/psedit-prompt.mjs` |
 | 전역 규칙 원본 | `install/CLAUDE.snippet.md` |
