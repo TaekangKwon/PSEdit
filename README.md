@@ -29,6 +29,7 @@ So PSEdit fixes the **structure first** (conclusion → decisions → background
 | Three modes | **Write** a new document · **Polish** an existing document or pasted text · **Convert** a document to another level of detail or the other language |
 | Six document types | Design, review (decision request), research, user manual, work report, meeting minutes — each with a Korean and a Japanese template |
 | Tech-stack diagrams | Technical specs and detailed tech explanations get a stack diagram, a role-per-technology table and an integration flow without being asked. The format — Markdown (Mermaid) or HTML (SVG) — is settled first; if nothing settles it, you are asked, with a recommendation |
+| Numbered screenshots in manuals | User manuals show each screen as an image with numbered markers and a matching short list of actions. If a screen cannot be captured, a look-alike mock image is made and labelled as such |
 | Structure check | A self-check list: is the conclusion on the first screen, are decisions in one place, is anything repeated |
 | Style dictionaries | Korean and Japanese pattern dictionaries (hedging, preambles, inanimate subjects and passives, translated-sounding phrases, overused words, symbols), each pattern with a severity |
 | Invariants | No new facts, numbers or names; no changes to negation, conditions, tense, certainty or units; code blocks and table data stay as they are |
@@ -132,7 +133,7 @@ When rules conflict, PSEdit follows this order: your instruction in this request
 skills/psedit/
   SKILL.md                 the skill: modes, invariants, procedures
   templates/{ko,ja}/       design, review, research, manual, report, minutes
-  references/              structure checklist, style pattern dictionaries, tech-stack diagram rules, sources
+  references/              structure checklist, style pattern dictionaries, tech-stack diagram rules, manual screenshot rules, sources
   hooks/                   optional UserPromptSubmit hook
 install/CLAUDE.snippet.md  optional global writing rules
 manual/                    user manual (Korean, Japanese)
